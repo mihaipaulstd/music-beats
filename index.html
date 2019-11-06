@@ -94,7 +94,9 @@
 
           beat.active = !beat.active;
 
-          
+          glb.maxBeatBarColumnsNo = 4;
+          glb.beats.forEach(object => glb.maxBeatBarColumnsNo = object.position.column > glb.maxBeatBarColumnsNo && object.active ? glb.maxBeatBarColumnsNo * 2 : glb.maxBeatBarColumnsNo);
+          console.log(glb.maxBeatBarColumnsNo);
         }
       
         document.getElementById('tbody').appendChild(row);
@@ -107,6 +109,11 @@
 
   }
 
+
+
+
+
+  //Beat bar
   
 
 
