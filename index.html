@@ -59,7 +59,7 @@
     currentBarPosition: 0,
     barMoving: false,
     id: null,
-    barSpeed: 3
+    barSpeed: 6
   }
   
   window.onload = init;
@@ -79,7 +79,7 @@
           .then(() => glb.beats.push({
             element: currentColumn,
             position: {
-              row: glb.lastRowNo,
+              row: glb.lastRowNo - 1,
               column: i,
               left: currentColumn.offsetLeft - row.offsetLeft
             },
@@ -157,7 +157,18 @@
               ? true
               : findClosest(++delta);
           })())
-        ).forEach(object => console.log(`tick`));
+        ).forEach(object => {
+          let hit = new Audio('Bass Hit.wav');
+          let hihat = new Audio('hi-hat.wav');
+          let snare = new Audio('snare05.wav');
+          if(object.position.row == 1)
+            hit.play();
+          else if(object.position.row == 2)
+            hihat.play();
+          else if(object.position.row == 3)
+            snare.play();
+          
+        });
         
           
           
