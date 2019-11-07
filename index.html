@@ -15,7 +15,7 @@
     }
     .beat-bar{
       position: absolute;
-      left: 20%;
+      left: 0;
       top: 0;
       transform: translateX(-50%);
       height: calc(100% - 16px);
@@ -32,13 +32,13 @@
         My music studio
       </h1>
     </div>
-    <div class="table-responsive p-0 m-0">
+    <div class="table-responsive p-0 m-0" id="table-container">
       <table class="table table-dark table-bordered table-striped" id="table">
         <tbody id="tbody">
           
         </tbody>
       </table>
-      <div class="beat-bar">
+      <div class="beat-bar" id="beat-bar">
       </div>
     </div>
     <div class="text-center">
@@ -56,6 +56,10 @@
     maxColumnsNo: 32,
     beats: new Array(),
     maxBeatBarColumnsNo: 4,
+    currentBarPosition: 0,
+    barMoving: false,
+    id: null,
+    barSpeed: 3
   }
   
   window.onload = init;
@@ -95,14 +99,26 @@
           beat.active = !beat.active;
 
           glb.maxBeatBarColumnsNo = 4;
-          let maxValues = [32, 16, 8, 4];
+
           glb.beats.forEach(object => {
             while(object.position.column > glb.maxBeatBarColumnsNo && object.active) glb.maxBeatBarColumnsNo *= 2;
           })
 
-          console.log(`bar length: ${glb.maxBeatBarColumnsNo}`)
+          console.log(`- - - - - - - - - - - - - -\nbar length: ${glb.maxBeatBarColumnsNo}\n`)
+
+          
+          
+          console.log(`Table clear: ${!glb.beats.some(object => object.active)}\n- - - - - - - - - - - - - -`);
+          if(glb.beats.length && glb.beats.some(object => object.active) && !glb.barMoving){
+            glb.barMoving = true;
+            moveBar();
+          }
+          else if(glb.beats.every(object => !object.active)){
+            glb.barMoving = false;
+            window.cancelAnimationFrame(glb.id);
+          }
         }
-      
+        
         document.getElementById('tbody').appendChild(row);
 
         i === glb.maxColumnsNo ? ++glb.lastRowNo : null;
@@ -111,13 +127,29 @@
 
     }
 
+    function moveBar(timestamp){
+      if(glb.beats.length != 0){
+        const bar = document.getElementById('beat-bar');
+        const table = document.getElementById('table-container');
+        let distancePerBeat = Math.floor(table.offsetWidth) / glb.maxColumnsNo;
+
+        glb.currentBarPosition += glb.barSpeed;
+        bar.style.transform = `translateX(${glb.currentBarPosition}px)`;
+
+        if(glb.currentBarPosition > glb.maxBeatBarColumnsNo * distancePerBeat){
+          glb.currentBarPosition = 0;
+          bar.style.transform = `translateX(0px)`;
+        }
+
+        glb.id = window.requestAnimationFrame(moveBar);
+
+        
+      }
+    }
+
   }
 
 
-
-
-
-  //Beat bar
   
 
 
