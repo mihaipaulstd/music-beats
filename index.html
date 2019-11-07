@@ -150,15 +150,16 @@
           bar.style.transform = `translateX(0px)`;
         }
 
-        if(glb.beats.some(object => (object.active && (function findClosest(delta = 0){
+        glb.beats.filter(object => (object.active && (function findClosest(delta = 0){
           return delta >= glb.barSpeed 
             ? false
             : (object.position.left == glb.currentBarPosition + delta)
               ? true
               : findClosest(++delta);
           })())
-        ))
-          console.log('tick');
+        ).forEach(object => console.log(`tick`));
+        
+          
           
           glb.currentBarPosition += glb.barSpeed;
           bar.style.transform = `translateX(${glb.currentBarPosition}px)`;
