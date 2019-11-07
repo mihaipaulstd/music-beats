@@ -95,8 +95,12 @@
           beat.active = !beat.active;
 
           glb.maxBeatBarColumnsNo = 4;
-          glb.beats.forEach(object => glb.maxBeatBarColumnsNo = object.position.column > glb.maxBeatBarColumnsNo && object.active ? glb.maxBeatBarColumnsNo * 2 : glb.maxBeatBarColumnsNo);
-          console.log(glb.maxBeatBarColumnsNo);
+          let maxValues = [32, 16, 8, 4];
+          glb.beats.forEach(object => {
+            while(object.position.column > glb.maxBeatBarColumnsNo && object.active) glb.maxBeatBarColumnsNo *= 2;
+          })
+
+          console.log(`bar length: ${glb.maxBeatBarColumnsNo}`)
         }
       
         document.getElementById('tbody').appendChild(row);
